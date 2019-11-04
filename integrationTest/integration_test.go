@@ -289,7 +289,12 @@ func txt(name, target string) *rec {
 
 func txtmulti(name string, target []string) *rec {
 	// FYI: This must match the algorithm in pkg/js/helpers.js TXT.
-	r := makeRec(name, target[0], "TXT")
+	var r *rec
+	if len(target) == 0 {
+		r = makeRec(name, "", "TXT")
+	} else {
+		r = makeRec(name, target[0], "TXT")
+	}
 	r.TxtStrings = target
 	return r
 }
@@ -550,6 +555,8 @@ func makeTests(t *testing.T) []*TestCase {
 		tc("Create a TXT", txt("foo", "simple")),
 		tc("Change a TXT", txt("foo", "changed")),
 		tc("Empty"),
+		tc("Null string TXT", txt("", "empty")),
+		tc("Empty"),
 		tc("Create a TXT with spaces", txt("foo", "with spaces")),
 		tc("Change a TXT with spaces", txt("foo", "with whitespace")),
 		tc("Create 1 TXT as array", txtmulti("foo", []string{"simple"})),
@@ -574,6 +581,10 @@ func makeTests(t *testing.T) []*TestCase {
 				txtmulti("foo1", []string{"simple"}),
 				txtmulti("foo2", []string{"one", "two"}),
 				txtmulti("foo3", []string{"eh", "bee", "cee"}),
+			),
+			// Now let's try some difficult edge cases:
+			tc("Create TXTMulti empty",
+				txtmulti("foo0", []string{}),
 			),
 			tc("Create TXTMulti with quotes",
 				txtmulti("foo1", []string{"simple"}),

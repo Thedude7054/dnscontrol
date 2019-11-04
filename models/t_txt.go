@@ -15,7 +15,11 @@ func (rc *RecordConfig) SetTargetTXT(s string) error {
 
 // SetTargetTXTs sets the TXT fields when there are many strings.
 func (rc *RecordConfig) SetTargetTXTs(s []string) error {
-	rc.SetTarget(s[0])
+	if len(s) == 0 {
+		rc.SetTarget("")
+	} else {
+		rc.SetTarget(s[0])
+	}
 	rc.TxtStrings = s
 	if rc.Type == "" {
 		rc.Type = "TXT"
